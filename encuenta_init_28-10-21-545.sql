@@ -1,94 +1,66 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Oct 29, 2021 at 12:44 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 8.0.9
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `encuenta`
---
-
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_preguntas` (IN `param_numero` SMALLINT(5), IN `param_pregunta` VARCHAR(200), IN `param_tipo` VARCHAR(50))  BEGIN
-       update preguntas set numero = param_numero, pregunta = param_pregunta, tipo = param_tipo where numero = param_numero;
-    END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultar_preguntas` ()  BEGIN 
-    select numero, pregunta, tipo from preguntas order by numero;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_preguntas` (IN `param_numero` SMALLINT(5))  BEGIN
-    DELETE from preguntas where numero = param_numero;
-    END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_preguntas` (IN `param_numero` INT(5), IN `param_pregunta` VARCHAR(200), IN `param_tipo` VARCHAR(50))  BEGIN 
-    insert into preguntas (numero, pregunta, tipo) VALUES (param_numero, param_pregunta, param_tipo); 
-END$$
-
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `preguntas`
---
 
 CREATE TABLE `preguntas` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `numero` int(5) NOT NULL,
   `pregunta` varchar(200) NOT NULL DEFAULT '',
-  `tipo` varchar(50) NOT NULL
+  `tipo` varchar(50) NOT NULL,
+  `respuestas` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `preguntas`
---
+INSERT INTO `preguntas` (`id`, `numero`, `pregunta`, `tipo`, `respuestas`) VALUES
+(7, 6, '¿Eres estudiante universitario?', 'Elección binaria', 'Si,No'),
+(8, 7, '¿Tienes vida propia?', 'Elección simple', 'si,no,digo que si pero no,mi mama dice que no hago nada'),
+(9, 4, '¿Que tipo de comidas prefieres?', 'Elección múltiple', 'asados,herbidos,guisados,tostados'),
+(21, 21, '¿te gusta el café?', 'Elección binaria', 'Si,No'),
+(22, 0, '¿Estas dentro del grupo?', 'Elección múltiple', 'de vez en cuando,retiré,ahi mas o meos'),
+(23, 0, 'Baby', 'Elección simple', 'te quiero wuo wuo, la vida eh un ciclo, shark tutururuturu, me rehuso a darle un beso asi que guarda');
 
-INSERT INTO `preguntas` (`id`, `numero`, `pregunta`, `tipo`) VALUES
-(7, 6, '', 'Elección binaria'),
-(8, 7, 'sdss', 'Elección binaria'),
-(9, 4, 'jgjy', 'Elección binaria'),
-(10, 10, 'ppppp', 'Elección múltiple'),
-(11, 8, 'jgjgjghj', 'Elección binaria'),
-(12, 100, 'uuuuuu', 'Elección binaria');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `preguntas`
---
 ALTER TABLE `preguntas`
   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `preguntas`
---
 ALTER TABLE `preguntas`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_preguntas`(IN `param_numero` INT(5), IN `param_pregunta` VARCHAR(200), IN `param_tipo` VARCHAR(50), IN `param_respuestas` VARCHAR(100))
+BEGIN
+
+update preguntas 
+
+set 
+    pregunta = param_pregunta, 
+    tipo = param_tipo, 
+    respuestas = param_respuestas 
+
+where id = param_numero;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_consultar_preguntas`()
+BEGIN 
+    select id, numero, pregunta, tipo, respuestas from preguntas order by id ASC;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_preguntas`(IN `param_numero` SMALLINT(5))
+BEGIN
+    DELETE from preguntas where id = param_numero;
+    END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_find_by_id`(IN `id_param` INT(3))
+select * from preguntas where id=id_param$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_preguntas`(IN `param_pregunta` VARCHAR(200), IN `param_tipo` VARCHAR(50), IN `param_respuestas` VARCHAR(100))
+BEGIN 
+    insert into preguntas (pregunta, tipo, respuestas) VALUES (param_pregunta, param_tipo, param_respuestas); 
+END$$
+DELIMITER ;
