@@ -24,10 +24,59 @@
             }
         }
 
+        public function InsertarRespuesta($grupo, $pregunta, $respuesta)
+        {
+            try{
+            $instruccion = "CALL insert_resp($grupo,$pregunta,'$respuesta')";
+            $this->_db->query($instruccion);
+            $this->_db->close();
+            } catch (Exception $e) {
+                echo "Fallo al insertar la respuesta";
+            }
+        }
+
         public function consultar()
         {
             # code...
             $instruccion = "CALL sp_consultar_preguntas()";
+
+            $consulta= $this->_db->query($instruccion);
+            $resultado=$consulta->fetch_all(MYSQLI_ASSOC);
+
+            if(!$resultado)
+            {
+                echo "Fallo al consultar las preguntas";
+            }
+            else
+            {
+                return $resultado;
+                $resultado->close();
+                $this->_db->close();
+            }
+        }
+        public function consultarPreguntasComunes()
+        {
+            # code...
+            $instruccion = "CALL get_preguntas_comunes()";
+
+            $consulta= $this->_db->query($instruccion);
+            $resultado=$consulta->fetch_all(MYSQLI_ASSOC);
+
+            if(!$resultado)
+            {
+                echo "Fallo al consultar las preguntas";
+            }
+            else
+            {
+                return $resultado;
+                $resultado->close();
+                $this->_db->close();
+            }
+        }
+        public function consultarPreguntasRandom()
+        {
+            # code...
+            $instruccion = "CALL get_preguntas_random()";
 
             $consulta= $this->_db->query($instruccion);
             $resultado=$consulta->fetch_all(MYSQLI_ASSOC);
