@@ -7,12 +7,25 @@
     <title>Módulo de Reportes</title>
 </head>
 <body>
-    <h1>Total de encuestas realizadas</h1>
+    <h1>Módulo de Reportes</h1>
+    <h2>Total de encuestas realizadas</h1>
+    <?php
+        require_once("class/preguntas.php");
+            $obj_preguntas = new preguntas();
+            $numeroDeRespuestas = $obj_preguntas->consultarNumeroTotalDeRespuestas();
+            $nfilas = count($numeroDeRespuestas);
+            if ($nfilas = 1)
+            {
+                foreach ($numeroDeRespuestas as $numeroTotal)
+                {
+                    print "<p>El numero total de encuestas son: " . $numeroTotal['total']. "</p>";
+                }
+            }
+    ?>
+    <h2>Total de encuestas realizadas por sexo</h2>
 
-    <h1>Total de encuestas realizadas por sexo</h1>
+    <h2>Total de encuestas realizadas por Rango salarial</h2>
 
-    <h1>Total de encuestas realizadas por Rango salarial</h1>
-
-    <h1>Total de encuestas realizadas por Provincia</h1>
+    <h2>Total de encuestas realizadas por Provincia</h2>
 </body>
 </html>
